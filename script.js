@@ -8,6 +8,7 @@ const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
 class Workout {
+  clicks = 0;
   date = new Date();
   id = (Date.now() + "").slice(-10);
   constructor(coords, distance, duration) {
@@ -22,6 +23,9 @@ class Workout {
     this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
       months[this.date.getMonth()]
     }${this.date.getDate()}`;
+  }
+  click() {
+    this.clicks++;
   }
 }
 class Running extends Workout {
@@ -53,11 +57,13 @@ class Cycling extends Workout {
 class App {
   #map;
   #GpsClick;
+  #mapZoomLevel = 13;
   #workouts = [];
   constructor() {
     this._getPosition();
     form.addEventListener("submit", this._newWorkout.bind(this));
     inputType.addEventListener("change", this._toggleElevationField);
+    containerWorkouts.addEventListener("click", this._moveToPopup.bind(this));
   }
   _getPosition() {
     //current location
@@ -72,7 +78,7 @@ class App {
     const { latitude } = position.coords;
     const { longitude } = position.coords;
     const coords = [latitude, longitude];
-    this.#map = L.map("map").setView(coords, 13);
+    this.#map = L.map("map").setView(coords, this.#mapZoomLevel);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -209,6 +215,19 @@ class App {
     }
     form.insertAdjacentHTML("afterend", html);
   }
+  _moveToPopup = (e) => {
+    const wokroutMove = e.target.closest(".workout");
+    if (!wokroutMove) return;
+    const workoutt = this.#workouts.find(
+      (work) => work.id === wokroutMove.dataset.id
+    );
+    this.#map.setView(workoutt.coords, this.#mapZoomLevel, {
+      animate: true,
+      pan: { duration: 1 },
+    });
+    workoutt.click();
+    console.log(workoutt);
+  };
 }
 //event for form
 const app = new App();

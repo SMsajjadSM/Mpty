@@ -8,7 +8,6 @@ const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
 class Workout {
-  clicks = 0;
   date = new Date();
   id = (Date.now() + "").slice(-10);
   constructor(coords, distance, duration) {
@@ -23,9 +22,6 @@ class Workout {
     this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
       months[this.date.getMonth()]
     }${this.date.getDate()}`;
-  }
-  click() {
-    this.clicks++;
   }
 }
 class Running extends Workout {
@@ -61,6 +57,7 @@ class App {
   #workouts = [];
   constructor() {
     this._getPosition();
+    this._getLocalStorage();
     form.addEventListener("submit", this._newWorkout.bind(this));
     inputType.addEventListener("change", this._toggleElevationField);
     containerWorkouts.addEventListener("click", this._moveToPopup.bind(this));
@@ -100,6 +97,9 @@ class App {
       .openPopup();
     //add event
     this.#map.on("click", this._showFrom.bind(this));
+    this.#workouts.forEach((work) => {
+      this._renderMarker(work);
+    });
   }
   _hideForm() {
     inputCadence.value =
@@ -150,7 +150,9 @@ class App {
     this.#workouts.push(workout);
     this._renderMarker(workout);
     this._renderWorkout(workout);
+    this._setLocalStorage();
   }
+
   _renderMarker(workout) {
     //add marker gps for form data
     L.marker(workout.coords)
@@ -225,9 +227,22 @@ class App {
       animate: true,
       pan: { duration: 1 },
     });
-    workoutt.click();
-    console.log(workoutt);
   };
+  _setLocalStorage() {
+    localStorage.setItem("workouts", JSON.stringify(this.#workouts));
+  }
+  _getLocalStorage() {
+    const getlocal = JSON.parse(localStorage.getItem("workouts"));
+    if (!getlocal) return;
+    this.#workouts = getlocal;
+    this.#workouts.forEach((work) => {
+      this._renderWorkout(work);
+    });
+  }
+  reset() {
+    localStorage.removeItem("workouts");
+    location.reload();
+  }
 }
 //event for form
 const app = new App();

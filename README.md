@@ -1,9 +1,9 @@
 
-# TodoList
-## Complete your day with planning!!
+# Mapty
+## Save your Works on Map!!
 
 
-[Demo of Todolist](https://smsajjadsm.github.io/Todo-List/)
+[Demo of Mapty](https://smsajjadsm.github.io/Todo-List/)
 ===
 ![plot](./IMG/1.png)
 ![plot](./IMG/2.png)

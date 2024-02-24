@@ -14,11 +14,9 @@
 
 ## Features
 
-- Different color theme for both dark and light mode
-- Ability to save data in local storage
-- Ability to save activities with date
-- Ability to search activities
-- The ability to change the information of each activity and save it again in local storage
+- Ability to show your location
+- Ability to save your activities inside the map
+
 
 
 

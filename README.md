@@ -5,8 +5,8 @@
 
 [Demo of Mapty](https://smsajjadsm.github.io/Mpty/)
 ===
-![plot](./IMG/1.png)
-![plot](./IMG/2.png)
+![plot](./images/2.jpg)
+![plot](./images/3.jpg)
 
 
 
